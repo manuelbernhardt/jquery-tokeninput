@@ -23,6 +23,8 @@ var DEFAULT_SETTINGS = {
     contentType: "json",
     queryParam: "q",
     tokenDelimiter: ",",
+    allowCreation: false,
+    creationText: "Create new token",
     tokenValue: "id",
     preventDuplicates: false,
     prePopulate: null,
@@ -590,7 +592,18 @@ $.TokenList = function (input, url_or_data, settings) {
                 dropdown_ul.show();
             }
         } else {
-            if(settings.noResultsText) {
+            if(settings.allowCreation) {
+                dropdown.empty();
+                var create = $("<p>" + settings.creationText + " '" + input_box.val() + "'</p>");
+                create.mousedown(function(event) {
+                    input_box.focus();
+                    insert_token(-1, input_box.val());
+                    hide_dropdown();
+                    input_box.val("");
+                    return false;
+                });
+                dropdown.append(create);
+            } else if(settings.noResultsText) {
                 dropdown.html("<p>"+settings.noResultsText+"</p>");
                 show_dropdown();
             }
